@@ -70,47 +70,15 @@ pub fn peer_to_peer_txn(
     gas_unit_price: u64,
 ) -> SignedTransaction {
     // get a SignedTransaction
-    // sender
-    //     .transaction()
-    //     .payload(aptos_stdlib::aptos_coin_transfer(
-    //         *receiver.address(),
-    //         transfer_amount,
-    //     ))
-    //     .sequence_number(seq_num)
-    //     .gas_unit_price(gas_unit_price)
-    //     .sign()
-    // let amount: u256 = transfer_amount as u256;
-    // let random_address = generate_random_vector(32);
     sender
         .transaction()
-        .payload(TransactionPayload::EntryFunction(EntryFunction::new(
-            ModuleId::new(
-                AccountAddress::new([
-                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 1,
-                ]),
-                ident_str!("evmx_tx").to_owned(),
-            ),
-            ident_str!("deposit").to_owned(),
-            vec![],
-            vec![
-                 bcs::to_bytes(&transfer_amount).unwrap(),
-                 bcs::to_bytes(&generate_random_vector(10)).unwrap()],
-        )))
+        .payload(aptos_stdlib::aptos_coin_transfer(
+            *receiver.address(),
+            transfer_amount,
+        ))
         .sequence_number(seq_num)
-        .gas_unit_price(gas_unit_price).max_gas_amount(1_000_000)
+        .gas_unit_price(gas_unit_price)
         .sign()
-}
-
-fn generate_random_vector(size: usize) -> Vec<u8> {
-    let mut rng = rand::thread_rng();
-    let mut vec = Vec::with_capacity(size);
-
-    for _ in 0..size {
-        vec.push(rng.gen::<u8>());
-    }
-
-    vec
 }
 
 pub fn peer_to_peer_txn_evm(
@@ -123,6 +91,7 @@ pub fn peer_to_peer_txn_evm(
     // get a SignedTransaction
     let to: Vec<u8> = vec![0x0000000000000000000000000000000000000000000000000000000000000001];
     // let amount: u256 = transfer_amount as u256;
+    let amount_bytes: Vec<u8> = transfer_amount.to_le_bytes().to_vec();
     sender
         .transaction()
         .payload(TransactionPayload::EntryFunction(EntryFunction::new(
@@ -135,7 +104,7 @@ pub fn peer_to_peer_txn_evm(
             ),
             ident_str!("deposit").to_owned(),
             vec![],
-            vec![bcs::to_bytes(&transfer_amount).unwrap(),
+            vec![bcs::to_bytes(&amount_bytes).unwrap(),
                  // bcs::to_bytes(&receiver.address().to_vec()).unwrap()
                  bcs::to_bytes(&to).unwrap()
             ],

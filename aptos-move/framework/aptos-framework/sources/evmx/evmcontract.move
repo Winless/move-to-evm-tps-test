@@ -10,7 +10,7 @@ module aptos_framework::evmx {
     use aptos_framework::event;
     use aptos_framework::timestamp::now_microseconds;
     use aptos_framework::evmx_storage;
-    use aptos_framework::evmx_util::{checkCaller};
+    use aptos_framework::evmx_util::{checkCaller, data_to_u256, u256_to_data};
     use aptos_framework::block;
     use aptos_framework::transaction_fee;
 
@@ -799,37 +799,6 @@ module aptos_framework::evmx {
         };
 
         bytes
-    }
-
-    fun u256_to_data(num256: u256): vector<u8> {
-        let res = vector::empty<u8>();
-        let i = 32;
-        while(i > 0) {
-            i = i - 1;
-            let shifted_value = num256 >> (i * 8);
-            let byte = ((shifted_value & 0xff) as u8);
-            vector::push_back(&mut res, byte);
-        };
-        res
-    }
-
-    fun data_to_u256(data: vector<u8>, p: u256, size: u256): u256 {
-        let res = 0;
-        let i = 0;
-        let len = (vector::length(&data) as u256);
-        assert!(size <= 32, 1);
-        while (i < size) {
-            if(p + i < len) {
-                let value = *vector::borrow(&data, ((p + i) as u64));
-                res = (res << 8) + (value as u256);
-            } else {
-                res = res << 8
-            };
-
-            i = i + 1;
-        };
-
-        res
     }
 
     fun to_int256(num: u256): (bool, u256) {

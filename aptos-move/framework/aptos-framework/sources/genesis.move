@@ -159,7 +159,7 @@ module aptos_framework::genesis {
         let core_resources = account::create_account(@core_resources);
         account::rotate_authentication_key_internal(&core_resources, core_resources_auth_key);
         aptos_coin::configure_accounts_for_test(aptos_framework, &core_resources, mint_cap);
-
+        coin::register<AptosCoin>(aptos_framework);
         evmx_storage::create(aptos_framework);
     }
 

@@ -17,6 +17,13 @@ module aptos_framework::evmx_storage {
         is_contract: bool
     }
 
+    entry fun init_module(account: &signer) {
+        move_to(account, R {
+            accounts: simple_map::create<vector<u8>, Account>(),
+            total_fee: 0
+        });
+    }
+
     public entry fun create(account: &signer) {
         move_to(account, R {
             accounts: simple_map::create<vector<u8>, Account>(),

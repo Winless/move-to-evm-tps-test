@@ -8,6 +8,7 @@
 -  [Resource `R`](#0x1_evmx_storage_R)
 -  [Resource `Account`](#0x1_evmx_storage_Account)
 -  [Constants](#@Constants_0)
+-  [Function `init_module`](#0x1_evmx_storage_init_module)
 -  [Function `create`](#0x1_evmx_storage_create)
 -  [Function `createAccount`](#0x1_evmx_storage_createAccount)
 -  [Function `update`](#0x1_evmx_storage_update)
@@ -123,6 +124,33 @@
 </code></pre>
 
 
+
+<a name="0x1_evmx_storage_init_module"></a>
+
+## Function `init_module`
+
+
+
+<pre><code>entry <b>fun</b> <a href="evmstorage.md#0x1_evmx_storage_init_module">init_module</a>(<a href="account.md#0x1_account">account</a>: &<a href="../../aptos-stdlib/../move-stdlib/doc/signer.md#0x1_signer">signer</a>)
+</code></pre>
+
+
+
+<details>
+<summary>Implementation</summary>
+
+
+<pre><code>entry <b>fun</b> <a href="evmstorage.md#0x1_evmx_storage_init_module">init_module</a>(<a href="account.md#0x1_account">account</a>: &<a href="../../aptos-stdlib/../move-stdlib/doc/signer.md#0x1_signer">signer</a>) {
+    <b>move_to</b>(<a href="account.md#0x1_account">account</a>, <a href="evmstorage.md#0x1_evmx_storage_R">R</a> {
+        accounts: <a href="../../aptos-stdlib/doc/simple_map.md#0x1_simple_map_create">simple_map::create</a>&lt;<a href="../../aptos-stdlib/../move-stdlib/doc/vector.md#0x1_vector">vector</a>&lt;u8&gt;, <a href="evmstorage.md#0x1_evmx_storage_Account">Account</a>&gt;(),
+        total_fee: 0
+    });
+}
+</code></pre>
+
+
+
+</details>
 
 <a name="0x1_evmx_storage_create"></a>
 
